@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <title>Chat with Assistant</title>
+    <style>
+        body{
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        body{
+            margin: 0;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        header{
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #000637;
+        }
+        nav{
+            width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .link-group{
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            /* padding: 0px; */
+        }
+        .link-group a{
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .link-group svg{
+            margin: 7px;
+            padding-bottom: 3px;
+        }
+
+        .profile-container{
+            display: flex;
+            align-items: center;
+            margin: 20px;
+        }
+        .profile-container p{
+            color: white;
+        }
+        .container{
+            margin: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="link-group">
+                <!-- <svg></svg> -->
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+            <div class="link-group">
+                <svg></svg>
+            </div>
+            <div class="link-group">
+                <svg></svg>
+                <a href="chat.html">Chat</a>
+            </div>
+            <div class="link-group">
+                <svg></svg>
+                <a href="activity.html">Activity</a>
+            </div>
+        </nav>
+    
+        <div class="profile-container">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title/><g id="about"><path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z"/><path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z"/></g></svg>
+            <p>Username</p>
+        </div>
+    </header>
+    <div class="container">
+        <h3>Assistants</h3>
+        <table id="assistantsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Assistant data will be populated here dynamically -->
+            </tbody>
+        </table>
+
+    </div>
+</body>
+<script>
+    // Function to fetch assistants data from backend and populate the table
+    function fetchAssistants() {
+        fetch('https://verbify-w7yg.onrender.com/assistants') // Fetch from your Flask backend endpoint
+        .then(response => response.json())
+        .then(assistants => {
+            const tableBody = document.querySelector('#assistantsTable tbody');
+            tableBody.innerHTML = ''; // Clear previous content
+            
+            // Iterate through each assistant and create a table row
+            assistants.forEach(assistant => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${assistant.name}</td>
+                    <td>${assistant.description}</td>
+                    <td>${assistant.created_at}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching assistants:', error));
+    }
+
+    // Fetch assistants when the page loads
+    window.onload = fetchAssistants;
+</script>
+</html>

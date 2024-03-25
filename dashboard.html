@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <title>Dashboard</title>
+    <style>
+        body{
+            margin: 0;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        header{
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #000637;
+        }
+        nav{
+            width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .link-group{
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            /* padding: 0px; */
+        }
+        .link-group a{
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .link-group svg{
+            margin: 7px;
+            padding-bottom: 3px;
+        }
+
+        .profile-container{
+            display: flex;
+            align-items: center;
+            margin: 20px;
+        }
+        .profile-container p{
+            color: white;
+        }
+        .container{
+            text-align: center;
+        }
+        input{
+            margin:15px;
+            padding: 15px;
+            background-color: rgba(128, 128, 128, 0.267);
+            border: none;
+            outline: none;
+            height: 30px;
+            width: 75vh;
+            border-radius: 10px;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        a{
+            margin: 20px;
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="link-group">
+                <!-- <svg></svg> -->
+                <a href="">Dashboard</a>
+            </div>
+            <div class="link-group">
+               
+                <a href="assistants.html">Assistants</a>
+            </div>
+            <div class="link-group">
+                
+                <a href="chat.html">Chat</a>
+            </div>
+            <div class="link-group">
+
+                <a href="activity.html">Activity</a>
+            </div>
+        </nav>
+    
+        <div class="profile-container">
+           
+            <p>Username</p>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Choose an Assistant for conversation</h2>
+        <input type="text" placeholder="Search Assistants">
+        <div class="assistants">
+            <!-- Assistants will be listed here dynamically -->
+        </div>
+        <a href="create.html">+ Create new Assistant</a>
+    </div>
+</body>
+<script>
+    // Function to fetch assistants from backend and render them
+    function fetchAssistants() {
+        fetch('https://verbify-w7yg.onrender.com/assistants') // Fetch from your Flask backend endpoint
+        .then(response => response.json())
+        .then(assistants => {
+            const assistantsContainer = document.querySelector('.assistants');
+            assistantsContainer.innerHTML = ''; // Clear previous content
+            
+            // Iterate through each assistant and create a link
+            assistants.forEach(assistant => {
+                const assistantLink = document.createElement('a');
+                assistantLink.href = `chat.html?assistant_id=${assistant.assistant_id}`; // Link to chat.html with assistant_id
+                assistantLink.textContent = assistant.name; // Display assistant name
+                assistantLink.classList.add('assistant-link');
+                
+                // Append assistant link to assistants container
+                assistantsContainer.appendChild(assistantLink);
+            });
+        })
+        .catch(error => console.error('Error fetching assistants:', error));
+    }
+
+    // Fetch assistants when the page loads
+    window.onload = fetchAssistants;
+</script>
+
+</html>
